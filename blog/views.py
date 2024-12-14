@@ -112,11 +112,11 @@ class imagePostSearch(viewsets.ViewSet):
             if has_date_filter:
                 year, month, day = request.data['year'], request.data['month'], request.data['day']
                 x = datetime.datetime(year, month, day, tzinfo=tz)
-                posts = Post.objects.filter(published_date__range=(x, x + datetime.timedelta(days=1)))
+                posts = Post.objects.filter(author=request.user, published_date__range=(x, x + datetime.timedelta(days=1)))
             else: # is_all_period x has_date_filter x -> all_period
                 now = datetime.datetime.now(tz=tz)
                 x = datetime.datetime(now.year, now.month, now.day, tzinfo=tz)
-                posts = Post.objects.filter(published_date__range=(x, x + datetime.timedelta(days=1)))
+                posts = Post.objects.filter(author=request.user, published_date__range=(x, x + datetime.timedelta(days=1)))
                 
         if 'query' in request.data:
             if isinstance(request.data['query'], str):
